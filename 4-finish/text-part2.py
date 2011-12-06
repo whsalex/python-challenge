@@ -23,6 +23,6 @@ while True:
             break
         else:
            print "Done!"+"-"*20
-        #Action if not break,break while
+        #Action.if not break,break while
     else:
         break 
