@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 
 string=raw_input('Please input: ')
 for char in range(len(string)):

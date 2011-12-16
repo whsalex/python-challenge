@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 
 #Initial url is "http://www.pythonchallenge.com/pc/def/linkedlist.php?nothing=12345"
 

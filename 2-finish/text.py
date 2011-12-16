@@ -1,4 +1,4 @@
-#!/usr/bin/python2.6
+#!/usr/bin/env python
 
 inputfile='/home/wanghs/practise/python/python-challenge/2-wip/file'
 
