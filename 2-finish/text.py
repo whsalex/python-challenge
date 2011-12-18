@@ -1,8 +1,6 @@
 #!/usr/bin/env python
 
-inputfile='/home/wanghs/practise/python/python-challenge/2-wip/file'
-
-fd=file(inputfile,"r")
+fd=file("file","r")
 lines=[line.strip() for line in fd.readlines()]
 fd.close()
 

@@ -2,7 +2,7 @@
 
 import re
 
-fd=file("/home/wanghs/practise/python/python-challenge/3-wip/file","r")
+fd=file("file","r")
 lines=[line.strip() for line in fd.readlines()]
 fd.close
 
