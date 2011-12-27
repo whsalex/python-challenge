@@ -47,9 +47,9 @@ def main():
 	    pix_list.append(pixel)
    
     #From small to big
-    pix_list.sort()
+    #pix_list.sort()
     #reverse for pop. No needed,due to will pop last as first
-    #pixList.reverse()
+    pix_list.reverse()
 
     indexList=range(100)
 
