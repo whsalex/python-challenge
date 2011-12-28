@@ -1,0 +1,7 @@
+import datetime
+
+a=datetime.date(year,1,26)
+a.isoweekday() ? 1 -> Monday
+
+or shell
+cal 1 $year|grep ....
