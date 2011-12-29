@@ -1,6 +1,5 @@
 #!/usr/bin/env python
-# URL: http://www.pythonchallenge.com/pc/return/mozart.html
-
+# URL: http://www.pythonchallenge.com/pc/return/romance.html
 
 def usage():
     print '''
