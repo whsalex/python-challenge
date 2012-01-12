@@ -2,9 +2,14 @@
 import os
 import re
 import zipfile
+import urllib
 
 filepath=os.path.join(os.path.abspath("."),"channelfile")
 zipf=os.path.join(os.path.abspath("."),"channel.zip")
+ZIPURL='http://www.pythonchallenge.com/pc/def/channel.zip'
+
+#Get and Save the file from server
+urllib.urlretrieve(ZIPURL,'channel.zip')
 
 # hint1: start from 90052
 startfile="90052"
