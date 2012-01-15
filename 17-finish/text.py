@@ -2,13 +2,15 @@
 # URL: http://www.pythonchallenge.com/pc/return/romance.html
 #The forth http://www.pythonchallenge.com/pc/def/linkedlist.php
 
-import urllib2,cookielib,re
+import urllib,urllib2,cookielib,re,bz2,xmlrpclib
 from os import linesep,unlink
 
 URL='http://www.pythonchallenge.com/pc/return/romance.html'
 PURL='http://www.pythonchallenge.com/pc/def/linkedlist.php'
 NEWURL='http://www.pythonchallenge.com/pc/def/linkedlist.php?busynothing='
 tempoutputfile='tempoutput.txt'
+urlPhoneBook='http://www.pythonchallenge.com/pc/phonebook.php'
+fatherAddr='http://www.pythonchallenge.com/pc/stuff/violin.php'
 
 BZ2String='BZh91AY%26SY%94%3A%E2I%00%00%21%19%80P%81%11%00%AFg%9E%A0+%00hE%3DM%B5%23%D0%D4%D1%E2%8D%06%A9%FA%26S%D4%D3%21%A1%EAi7h%9B%9A%2B%BF%60%22%C5WX%E1%ADL%80%E8V%3C%C6%A8%DBH%2632%18%A8x%01%08%21%8DS%0B%C8%AF%96KO%CA2%B0%F1%BD%1Du%A0%86%05%92s%B0%92%C4Bc%F1w%24S%85%09%09C%AE%24%90'
 
@@ -44,7 +46,7 @@ def find_bzstring():
 #
 #    lines=[line for line in fp1.readlines()]
 #
-#    #print "=======Stage 17======="
+#    print "=======Stage 17======="
 #    print fp1.info()
 #    
 #    fp1.close()
@@ -88,7 +90,7 @@ def find_bzstring():
 
         if result is not None:
             infostring+=result.groups()[0]
-        #print "BZ2:",infostring
+            #print "BZ2:",infostring
        
         #Find the next link
         for line in fp.readlines():
@@ -108,12 +110,12 @@ def find_bzstring():
             stopFlag=True
 
         #Record the finding text
-#        fd_tmp=file(tempoutputfile,'a')
-#        fd_tmp.write(line+"%s" % linesep)
-#        fd_tmp.write("".join(fp.info().getheaders('Set-Cookie'))+"%s" % linesep)
-#        fd_tmp.close()
+        fd_tmp=file(tempoutputfile,'a')
+        fd_tmp.write(line+"%s" % linesep)
+        fd_tmp.write("".join(fp.info().getheaders('Set-Cookie'))+"%s" % linesep)
+        fd_tmp.close()
 
-#        fp.close()
+        fp.close()
  
         print "="*50+"\n"*2
 
@@ -129,11 +131,53 @@ def find_bzstring():
 
     BZ2String=infostring
 
+def call_him():
+    phoneServer=xmlrpclib.ServerProxy(urlPhoneBook)
+
+    #List all method in server
+    print phoneServer.system.listMethods()
+
+    #Call to mozart's father
+    print "==Get the number of mozart's fater.=="
+    print phoneServer.phone('Leopold')
+
+    #Then find out the URL"http://www.pythonchallenge.com/pc/stuff/violin.php"
+    #Just tell him "the flowers are on their way"
+    saying="the flowers are on their way"
+    words=urllib.quote_plus(saying)
+
+    #Could see all http headers via "http://en.wikipedia.org/wiki/List_of_HTTP_header_fields"
+    header={'Cookie':'info='+words}
+    req=urllib2.Request(fatherAddr,headers=header)
+
+    fp_final=urllib2.urlopen(req)
+    lines=[line for line in fp_final.readlines()]
+    fp_final.close()
+
+    #Response from mozart's father
+    print "==Response from mozart's father.=="
+    for i in lines:
+        print i,
+    
+
 def main():
     #build_URL_opener()
     
     #find_bzstring()
-    print BZ2String
+    #print BZ2String
+
+    #Convert url encode to ASCII code or UTF-8
+    #Using urllib.unquote() <--> urllib.quote()
+    #bzString=urllib2.unquote(BZ2String)   #Wrong!!!!
+    bzString=urllib.unquote_plus(BZ2String)  
+
+    message=bz2.decompress(bzString)
+    #"is it the 26th already? call his father and inform him that "the flowers are on their way". he'll understand."
+    print message
+
+    #Google mozart's father (Leopold) and call him via method of level 13.
+    call_him()
+
 
 if __name__=='__main__':
     main()
