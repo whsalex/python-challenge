@@ -4,6 +4,8 @@
 
 import urllib2
 import base64,binascii
+import wave
+from os import unlink
 
 URL_domain='http://www.pythonchallenge.com'
 URL='http://www.pythonchallenge.com/pc/hex/bin.html'
@@ -40,9 +42,34 @@ def createWav():
     #fd.write(binascii.a2b_base64(newstr))
     fd.close()
 
-def main():
-    createWav()
+def endianRevert():
+    '''Reference from google.'''
+    wd_old=wave.open("indian.wav","rb")
+    params=wd_old.getparams()
+    print params
 
+    try:
+        unlink("enddian.wav")
+    except OSError:
+        print "Generate output file."
+    else:
+        print "Update output file."
+
+    wd_new=wave.open("enddian.wav","wb")
+    wd_new.setparams(params)
+    
+    #Google...need to reverse by frames.I did it all reverse.....
+    for i in range(params[3]):
+        wd_new.writeframes(wd_old.readframes(1)[::-1])
+
+    wd_old.close()
+    wd_new.close()
+
+def main():
+    #createWav()
+    endianRevert()
     #Getting stuck... google find answer. Need reverse
+
+
 if __name__=='__main__':
     main()
