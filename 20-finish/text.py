@@ -122,7 +122,7 @@ def download_zipfile():
 def extractzipfile():
     zipf=zipfile.ZipFile('downloadfile')
     zipf.setpassword('redavni')
-    zipf.extractall('/home/wanghs/practise/python/pcwork/20-wip/extrafloader')
+    zipf.extractall('./extrafloader')
     
 
 def main():
