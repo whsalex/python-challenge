@@ -1,0 +1,42 @@
+Wiki of Image module:
+http://www.pythonware.com/library/pil/handbook/introduction.htm
+
+#######################Note############################
+Image Sequences
+
+The Python Imaging Library contains some basic support for image sequences (also called animation formats). Supported sequence formats include FLI/FLC, GIF, and a few experimental formats. TIFF files can also contain more than one frame.
+When you open a sequence file, PIL automatically loads the *first frame* in the sequence. You can use the seek and tell methods to move between different frames:
+##Eg. Reading sequences##
+
+import Image
+
+im = Image.open("animation.gif")
+im.seek(1) # skip to the second frame
+
+try:
+    while 1:
+        im.seek(im.tell()+1)
+        # do something to im
+except EOFError:
+    pass # end of sequence
+
+*As seen in this example, you'll get an EOFError exception when the sequence ends.*
+
+Note that most drivers in the current version of the library *only allow you to seek to the next frame* (as in the above example). To rewind the file, you may have to reopen it.
+
+##The following iterator class lets you to use the for-statement to loop over the sequence:##
+A sequence iterator class
+
+class ImageSequence:
+    def __init__(self, im):
+        self.im = im
+    def __getitem__(self, ix):
+        try:
+            if ix:
+                self.im.seek(ix)
+            return self.im
+        except EOFError:
+            raise IndexError # end of sequence
+
+for frame in ImageSequence(im):
+    # ...do something to frame...
