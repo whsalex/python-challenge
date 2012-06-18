@@ -2,6 +2,8 @@
 #URL: http://www.pythonchallenge.com/pc/hex/ambiguity.html
 #butter@fly - username:passwd
 
+# Wrong!way is not white,white point is a wall.
+
 import Image
 
 def usage():
@@ -32,7 +34,6 @@ def getstart(list):
     '''
     Find the start point.
     Using yield/iter.
-    Useless....  due to start point is (639,0)
     '''
 
     for x in range(1,640):
@@ -41,7 +42,7 @@ def getstart(list):
             yield (x,0)
 
 def testpoint(xy,pixlist,route):
-    if pixlist[xy]!=255:
+    if pixlist[xy]==255:
         for i in route:
             if xy==i[0]:
                 return False
@@ -147,15 +148,20 @@ def run():
     #Search sequence is from down,left,right,top
     #Mark route in a list,like [((coord_x,coord_y),downflag,leftflag,rightflag,topflag)]
 
-    #Start point is fixed,not white point.(639,0)
-    startpoint=(639,0)
+    success_flag=False
+
+    while success_flag is not True:
+        startpoints=getstart(pixlist)
+    
+        for i in startpoints:
+            success_flag=findway(i,pixlist)
    
-    success_flag=findway(startpoint,pixlist)
-   
-    if success_flag!=True:
-       print "Cannot find a way from (639,0) to the bottom."
-    else:
-       print "done"
+            if success_flag==True:
+                break
+
+        else:
+            print "Cannot find a way to the bottom."
+            break
 
 def main():
     print "  ===  start level 24  === "
