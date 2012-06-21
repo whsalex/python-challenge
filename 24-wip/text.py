@@ -2,7 +2,7 @@
 #URL: http://www.pythonchallenge.com/pc/hex/ambiguity.html
 #butter@fly - username:passwd
 
-import Image
+import Image,time
 
 def usage():
     print '''
@@ -14,18 +14,18 @@ def getPixels():
     max_x,max_y=im.size
     #im.size is (641,641)
 
-    pixlist={}
+    plist={}
 
     for x in range(max_x):
         for y in range(max_y):
             pix=im.getpixel((x,y))
-	    pixlist[(x,y)]=pix[0]
+	    plist[(x,y)]=(pix[0],pix[1],pix[2])
 
     fd=file('output','w')
-    for i in pixlist:
-        fd.write("%s : %s\n" % (i,pixlist[i]))
+    for i in plist:
+        fd.write("%s : %s\n" % (i,plist[i]))
     fd.close()
-    return pixlist
+    return plist
 
 
 def getstart(list):
@@ -36,21 +36,23 @@ def getstart(list):
     '''
 
     for x in range(1,640):
+        # 255, 255, 255  mean white point.
+        # Only R in RGB = 255 is not equal white.
         if list[(x,0)]==255:
             print "Start point (%s,0)." % x
             yield (x,0)
 
-def testpoint(xy,pixlist,route):
-    if pixlist[xy]!=255:
+def testpoint(xy,route):
+    if pixlist[xy][0]!=255 or pixlist[xy][1]!= 255 or pixlist[xy][2]!=255:
+        # Check whether the point appeared or not.
         for i in route:
             if xy==i[0]:
                 return False
-        else:
-            return True
+        return True
     else:
         return False
 
-def findnext(route,pixlist):
+def findnext(route):
     '''
     Called by findway.
     Return success/fail flag,pervious route info(modified),new route info.
@@ -59,54 +61,53 @@ def findnext(route,pixlist):
     #Mark route in a list,like [((coord_x,coord_y),downflag,leftflag,rightflag,topflag)]
 
     oldpoint=route[-1]
-    print "route.",
-    for i in oldpoint:
-        print i,
-
-    print ""
+    #print "route.",
+    #for i in oldpoint:
+    #    print i,
+    #print ""
 
     while True:
         if oldpoint[1]:
+            oldpoint[1]=False
             #Try the below point
-            if (oldpoint[0][1]+1<=640) and testpoint((oldpoint[0][0],oldpoint[0][1]+1),pixlist,route): 
-                oldpoint[1]=False
+            if (oldpoint[0][1]+1<=640) and testpoint((oldpoint[0][0],oldpoint[0][1]+1),route): 
                 newpoint=[(oldpoint[0][0],oldpoint[0][1]+1),True,True,True,False]
                 return True,oldpoint,newpoint
             else:
-                oldpoint[1]=False
+                # break the if - else,and retry in next loop
                 continue
         elif oldpoint[2]:
+            oldpoint[2]=False
             #Try the left point
-            if (oldpoint[0][0]-1>=1) and testpoint((oldpoint[0][0]-1,oldpoint[0][1]),pixlist,route): 
-                oldpoint[2]=False
+            if (oldpoint[0][0]-1>=1) and testpoint((oldpoint[0][0]-1,oldpoint[0][1]),route): 
                 newpoint=[(oldpoint[0][0]-1,oldpoint[0][1]),True,True,False,True]
                 return True,oldpoint,newpoint
             else:
-                oldpoint[2]=False
+                # break the if - else,and retry in next loop
                 continue
         elif oldpoint[3]:
+            oldpoint[3]=False
             #Try the right point
-            if (oldpoint[0][0]+1<=639) and testpoint((oldpoint[0][0]+1,oldpoint[0][1]),pixlist,route): 
-                oldpoint[3]=False
+            if (oldpoint[0][0]+1<=640) and testpoint((oldpoint[0][0]+1,oldpoint[0][1]),route): 
                 newpoint=[(oldpoint[0][0]+1,oldpoint[0][1]),True,False,True,True]
                 return True,oldpoint,newpoint
             else:
-                oldpoint[3]=False
+                # break the if - else,and retry in next loop
                 continue
         elif oldpoint[4]:
+            oldpoint[4]=False
             #Try the upper point
-            if (oldpoint[0][1]-1>0) and testpoint((oldpoint[0][0],oldpoint[0][1]-1),pixlist,route): 
-                oldpoint[4]=False
+            if (oldpoint[0][1]-1>=1) and testpoint((oldpoint[0][0],oldpoint[0][1]-1),route): 
                 newpoint=[(oldpoint[0][0],oldpoint[0][1]-1),False,True,True,True]
                 return True,oldpoint,newpoint
             else:
-                oldpoint[4]=False
+                # break the if - else,and retry in next loop
                 continue
         else:
-            #Dead way.
+            # No other choice for this point. Dead way.
             return False,oldpoint,oldpoint
 
-def findway(coord,pixlist):
+def findway(coord):
     #Search sequence is from down,left,right,top
     #Mark new point in a list,like [((coord_x,coord_y),downflag,leftflag,rightflag,topflag)]
     route=[]
@@ -114,7 +115,7 @@ def findway(coord,pixlist):
     route.append( [(coord[0],coord[1]),True,True,True,False] )
 
     while True:
-        flag,oldpoint,newpoint=findnext(route,pixlist)
+        flag,oldpoint,newpoint=findnext(route)
 
         if flag is not True:
             #Could not find next point,need back to pervious point
@@ -142,6 +143,7 @@ def findway(coord,pixlist):
                 return True
 
 def run():
+    global pixlist
     pixlist=getPixels()
 
     #Search sequence is from down,left,right,top
@@ -150,7 +152,7 @@ def run():
     #Start point is fixed,not white point.(639,0)
     startpoint=(639,0)
    
-    success_flag=findway(startpoint,pixlist)
+    success_flag=findway(startpoint)
    
     if success_flag!=True:
        print "Cannot find a way from (639,0) to the bottom."
@@ -159,7 +161,10 @@ def run():
 
 def main():
     print "  ===  start level 24  === "
+    start_time=time.time()
     run()
+    finish_time=time.time()
+    print "Program running for %d seconds." % ( finish_time - start_time ) 
     print "  ===  finish level 24  === "
 
 if __name__=='__main__':
