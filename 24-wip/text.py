@@ -2,7 +2,7 @@
 #URL: http://www.pythonchallenge.com/pc/hex/ambiguity.html
 #butter@fly - username:passwd
 
-import Image,time
+import Image,time,zipfile
 
 def usage():
     print '''
@@ -21,10 +21,10 @@ def getPixels():
             pix=im.getpixel((x,y))
 	    plist[(x,y)]=(pix[0],pix[1],pix[2])
 
-    fd=file('output','w')
-    for i in plist:
-        fd.write("%s : %s\n" % (i,plist[i]))
-    fd.close()
+    #fd=file('temp_pixlist','w')
+    #for i in plist:
+    #    fd.write("%s : %s\n" % (i,plist[i]))
+    #fd.close()
     return plist
 
 
@@ -107,6 +107,21 @@ def findnext(route):
             # No other choice for this point. Dead way.
             return False,oldpoint,oldpoint
 
+def drawfile(way):
+    new_file=file('output.zip','w')
+
+    # Write the pixs of every other point --> convert to chr
+    for i in range(len(way))[1::2]:
+        new_file.write("%s" % chr(pixlist[way[i]][0]))
+
+    new_file.close()
+ 
+    print "Create a zip file in 'output.zip'."
+
+    #zipf=zipfile.ZipFile('output.zip')
+    #zipf.extractall('./extrafloader')
+
+
 def findway(coord):
     #Search sequence is from down,left,right,top
     #Mark new point in a list,like [((coord_x,coord_y),downflag,leftflag,rightflag,topflag)]
@@ -123,7 +138,7 @@ def findway(coord):
             if len(route)==0:
                 #No point exist in list,dead startpoint
                 print "Dead start point."
-                return False
+                return False,route
 
         else:
             #Could find next point,continue to try
@@ -138,9 +153,10 @@ def findway(coord):
                 #Route list is the point of the maze
                 #Route is the right way
                 print "Find a way."
-                for i in route:
-                    print i[0]
-                return True
+
+                way=[p[0] for p in route]
+
+                return True,way
 
 def run():
     global pixlist
@@ -152,12 +168,15 @@ def run():
     #Start point is fixed,not white point.(639,0)
     startpoint=(639,0)
    
-    success_flag=findway(startpoint)
+    success_flag,way=findway(startpoint)
    
     if success_flag!=True:
        print "Cannot find a way from (639,0) to the bottom."
     else:
+
+       drawfile(way)
        print "done"
+
 
 def main():
     print "  ===  start level 24  === "
