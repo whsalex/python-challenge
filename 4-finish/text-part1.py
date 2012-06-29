@@ -20,9 +20,13 @@ while True:
         if reg is not None:
             for no in reg.groups():
                temp_url=url+no 
+            # Find the string.
+            # Continue to the next search.
             break
         else:
            print "Done!"+"-"*20
-        #Action.if not break,break while
     else:
+    # Break when meeting empty page.
+    # Or could not find a match string.Also means find the tail of page.
+    # Then break while loop
         break 
