@@ -20,7 +20,7 @@ string=""
 #get the zip object
 zip=zipfile.ZipFile(zipf)
 #extact the files
-zip.extractall('/home/wanghs/practise/python/python-challenge/6-wip/channelfile')
+zip.extractall(filepath)
 
 while True:
     #Get the comment from all file
@@ -38,7 +38,8 @@ while True:
            #break for if find a match string
            break
         else:
-           pass #print line
+           # Find the next line
+           pass
     else:
         break
 
