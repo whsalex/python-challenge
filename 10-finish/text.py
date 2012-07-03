@@ -35,21 +35,20 @@ Generate next number...Just pronounce it.
     temp_int = 0
     length=len(p_str)
 
+    # Actually,no need to use range length.
+    # Could use 'for i in p_str' directly
     for i in range(length):
         if temp_str==p_str[i]:
             temp_int+=1
 
         else:
 	    #Add the last info when not match.
-            string+=str(temp_int)
-            string+=temp_str
+            string+=str(temp_int)+temp_str
             temp_str=p_str[i]
             temp_int=1
 
-    else:
-        #Flash the last date to string
-        string+=str(temp_int)
-        string+=temp_str
+    #Flash the last date to string
+    string+=str(temp_int)+temp_str
     
     return string
 
