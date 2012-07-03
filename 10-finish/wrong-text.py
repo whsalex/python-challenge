@@ -15,9 +15,16 @@ def checkArgv():
     if argc != 2:
         usage()
 	return 1
-    if type(int(sys.argv[1])) is not types.IntType: 
-	usage()
-	return 1
+
+    try:
+        int(sys.argv[1])
+    except ValueError, reason:
+        print "STOPINT should be a integer," ,reason
+        usage()
+        return 1
+    #if type(int(sys.argv[1])) is not types.IntType: 
+    #	usage()
+    #	return 1
 
 def nextStr(p_str):
     '''
