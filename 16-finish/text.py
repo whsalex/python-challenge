@@ -39,8 +39,8 @@ def main():
 		#    pass
 
         #MoveFlag=True means already moved
-	else:
-	    continue
+	#else:
+	#    continue
     
     outim.save(output,'GIF')
 

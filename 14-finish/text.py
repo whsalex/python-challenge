@@ -11,26 +11,26 @@ def usage():
     Nothing.
     '''
 
-def drawPixel(x,y,pixList):
+def drawPixel(x,y):
     
     antilist=range(x,y)
     antilist.reverse()
     
     #up line
     for temp_x in range(x,y):
-        outim.putpixel((int(temp_x),x),pixList.pop())
+        outim.putpixel((int(temp_x),x),pix_list.pop())
 
     #right line
     for temp_y in range(x,y):
-        outim.putpixel((y,int(temp_y)),pixList.pop())
+        outim.putpixel((y,int(temp_y)),pix_list.pop())
 
     #down line
     for temp_x in antilist:
-        outim.putpixel((int(temp_x),y),pixList.pop())
+        outim.putpixel((int(temp_x),y),pix_list.pop())
 
     #left line
     for temp_y in antilist:
-        outim.putpixel((x,int(temp_y)),pixList.pop())
+        outim.putpixel((x,int(temp_y)),pix_list.pop())
 
 def main():
     im=Image.open('wire.png')
@@ -38,6 +38,7 @@ def main():
     x_max,y_max=im.size
     #print "x_max,y_max is (%s,%s)." % (x_max,y_max)
 
+    global pix_list
     pix_list=[]
 
     for x in range(x_max):
@@ -54,12 +55,14 @@ def main():
     indexList=range(100)
 
     while len(indexList) != 0:
-        drawPixel(int(indexList[0]),int(indexList[-1]),pix_list)
+        drawPixel(int(indexList[0]),int(indexList[-1]))
 
+	#indexList.pop()
+	#indexList.reverse()
+	#indexList.pop()
+	#indexList.reverse()
 	indexList.pop()
-	indexList.reverse()
-	indexList.pop()
-	indexList.reverse()
+	indexList.pop(0)
 
     #for x in range(100):
     #    for y in range(100):
