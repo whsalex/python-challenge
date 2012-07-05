@@ -4,14 +4,17 @@
 import Image
 
 #o: odd, e: even
+#imdic={'o_o':'im_odd_odd','e_e':'im_even_even','o_e':'im_odd_even',\
+#       'e_o':'im_even_odd','pix':'im_pix'}
 imdic={'o_o':'im_odd_odd','e_e':'im_even_even','o_e':'im_odd_even',\
-       'e_o':'im_even_odd','pix':'im_pix'}
+       'e_o':'im_even_odd'}
 
 def usage():
     print '''
     Nothing.
     '''
 def chooseImage(x,y):
+    # Choose a picture to draw based on the odd/even of coordinate.
     if x%2==1 and y%2==1:
        return imdic['o_o']
     elif x%2==1 and y%2==0:
@@ -37,8 +40,8 @@ def main():
             #print pix
             chooseImage(x,y).putpixel((x,y),pixel)
             
-            if pixel[0]%2==1 and pixel[1]%2==0 and pixel[2]==0:
-                imdic['pix'].putpixel((x,y),pixel) 
+            #if pixel[0]%2==1 and pixel[1]%2==0 and pixel[2]==0:
+            #    imdic['pix'].putpixel((x,y),pixel) 
     
     for ims in imdic:
         imdic[ims].save('%s.jpg' % ims,'JPEG')
