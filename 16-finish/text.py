@@ -31,6 +31,9 @@ def main():
 			        ==195:
 		    for tmp_x in range(x_max):
 			#Make a move when found the pattern(purple line)
+			# coord_x = (tmp_x+640-x)%640    equal
+			# tmp_x -x    when   tmp_x > x
+			# 640-(x-tmp_x)   when   tmp_x < x
 			coord_x=(tmp_x+640-x)%640
 			newpixel=im.getpixel((tmp_x,y))
 		        outim.putpixel((coord_x,y),newpixel)
