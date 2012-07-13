@@ -19,7 +19,7 @@ def draw(pix_list):
     im=Image.new('RGB',(nchar*200,200))
     fd=ImageDraw.Draw(im)
 
-    coord=(75,75)
+    #coord=(75,75)
     #Since first coord is (100,100)
     count_char=-1
 
